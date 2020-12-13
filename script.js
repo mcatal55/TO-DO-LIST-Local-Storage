@@ -1,57 +1,52 @@
 var idNummer = 0;
-var aTaskList;
+var activeTaskList;
 
 localstorageControl();
 
 function localstorageControl() {
-    if (localStorage.getItem("aTaskList")) {
-        aTaskList = []
-        aTaskList = JSON.parse(localStorage.getItem("aTaskList"));
 
-        aTaskList.forEach(element => {
-            loadItem(element, "ulActive")
+    if (localStorage.getItem("activeTaskList")) {
+        activeTaskList = []
+        activeTaskList = JSON.parse(localStorage.getItem("activeTaskList"));
+
+        activeTaskList.forEach(element => {
+            loadItem(element, "activeList", "activeTaskList")
         });
     } else {
-        aTaskList = [];
-        localStorage.setItem("aTaskList", JSON.stringify(aTaskList))
+        activeTaskList = [];
+        localStorage.setItem("activeTaskList", JSON.stringify(activeTaskList))
     }
 
-    if (localStorage.getItem("bTaskList")) {
-        bTaskList = []
-        bTaskList = JSON.parse(localStorage.getItem("bTaskList"));
+    if (localStorage.getItem("passiveTaskList")) {
+        passiveTaskList = []
+        passiveTaskList = JSON.parse(localStorage.getItem("passiveTaskList"));
 
-        bTaskList.forEach(element => {
-            loadItem(element, "ulPassive")
-
+        passiveTaskList.forEach(element => {
+            loadItem(element, "passiveList", "passiveTaskList")
         });
     } else {
-        bTaskList = [];
-        localStorage.setItem("bTaskList", JSON.stringify(bTaskList))
+        passiveTaskList = [];
+        localStorage.setItem("passiveTaskList", JSON.stringify(passiveTaskList))
     }
 }
-
-
-
-
 
 
 function addItem(text) {
     //get input value
     var textTask = document.getElementById('textInput')
 
-
     if (textTask.value.trim() != "") {
         idNummer++;
 
-        createItem(textTask.value, "ulActive");
+        createItem(textTask.value, "activeList", "activeTaskList");
 
-        addLocalstorage(textTask.value, "aTaskList");
+        addLocalstorage(textTask.value, "activeTaskList");
 
         textTask.value = "";
     }
 }
 
-function createItem(inputText, localstorageName) {
+function createItem(inputText, listName, taskType) {
     //create li element and add its attributes
     var li = document.createElement("li");
 
@@ -74,35 +69,36 @@ function createItem(inputText, localstorageName) {
     liButton.setAttribute('type', 'button')
     liButton.setAttribute('class', 'btn-close')
     liButton.setAttribute('aria-label', 'Close')
-    liButton.setAttribute('onclick', `deleteItem(${idNummer})`)
+    liButton.setAttribute('onclick', `deleteItem(${idNummer}, "${taskType}")`)
 
     li.appendChild(liButton);
-    console.log(localstorageName)
+
     //insert li element with button inside ul element
-    document.getElementById(localstorageName).appendChild(li);
-    if (localstorageName == "ulPassive") {
+    document.getElementById(listName).appendChild(li);
+
+    if (listName == "passiveList") {
         li.style.backgroundColor = "#ff9c9c";
         liInput.checked = true;
     }
 }
 
-function loadItem(inputText, localstorageName) {
+function loadItem(inputText, listName, taskType) {
     idNummer++;
-    createItem(inputText, localstorageName);
+    createItem(inputText, listName, taskType);
 }
 
-function deleteItem(itemId) {
+function deleteItem(itemId, taskType) {
     var item = document.getElementById("li" + itemId);
     item.remove();
 
-    taskListA = JSON.parse(localStorage.getItem("aTaskList"));
-    aTaskList = []
+    taskListA = JSON.parse(localStorage.getItem(taskType));
+    taskList = []
     taskListA.forEach(element => {
-        aTaskList.push(element);
+        taskList.push(element);
     });
 
-    aTaskList.splice(aTaskList.indexOf(item.innerText), 1)
-    localStorage.setItem("aTaskList", JSON.stringify(aTaskList))
+    taskList.splice(taskList.indexOf(item.innerText), 1)
+    localStorage.setItem(taskType, JSON.stringify(taskList))
 }
 
 function addLocalstorage(inputText, localstorageName) {
@@ -118,13 +114,13 @@ function addLocalstorage(inputText, localstorageName) {
 
 function deleteLocalstorage(inputText, localstorageName) {
     taskListA = JSON.parse(localStorage.getItem(localstorageName));
-    aTaskList = []
+    activeTaskList = []
     taskListA.forEach(element => {
-        aTaskList.push(element);
+        activeTaskList.push(element);
     });
 
-    aTaskList.splice(aTaskList.indexOf(inputText), 1)
-    localStorage.setItem(localstorageName, JSON.stringify(aTaskList))
+    activeTaskList.splice(activeTaskList.indexOf(inputText), 1)
+    localStorage.setItem(localstorageName, JSON.stringify(activeTaskList))
 }
 
 //Add Item with Enter
@@ -142,16 +138,16 @@ function clickCheckbox(idnummer) {
     if (item.checked) {
         listItem.style.backgroundColor = "#ff9c9c";
 
-        document.getElementById("ulPassive").appendChild(listItem);
+        document.getElementById("passiveList").appendChild(listItem);
 
-        addLocalstorage(listItem.innerText, "bTaskList")
-        deleteLocalstorage(listItem.innerText, "aTaskList")
+        addLocalstorage(listItem.innerText, "passiveTaskList")
+        deleteLocalstorage(listItem.innerText, "activeTaskList")
 
     } else {
         listItem.style.backgroundColor = "#fff";
-        document.getElementById("ulActive").appendChild(listItem);
+        document.getElementById("activeList").appendChild(listItem);
 
-        addLocalstorage(listItem.innerText, "aTaskList")
-        deleteLocalstorage(listItem.innerText, "bTaskList")
+        addLocalstorage(listItem.innerText, "activeTaskList")
+        deleteLocalstorage(listItem.innerText, "passiveTaskList")
     }
 }

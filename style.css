@@ -1,0 +1,21 @@
+.nav-pills .nav-link.active {
+    background-color: #F7BB07;
+    color: black;
+    font-weight: bold;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    color: #F7BB07;
+}
+
+#pills-tab {
+    border-bottom: 1px solid rgb(175, 175, 175);
+}
+
+.tasklistheader {
+    border-bottom: 1px solid rgb(142 142 142);
+}

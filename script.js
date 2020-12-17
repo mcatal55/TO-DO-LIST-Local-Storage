@@ -134,14 +134,19 @@ enterKey.addEventListener('keydown', function (e) {
 function clickCheckbox(idnummer) {
     var item = document.getElementById("input" + idnummer);
     var listItem = document.getElementById("li" + idnummer);
-
+    console.log(idnummer)
     if (item.checked) {
         listItem.style.backgroundColor = "#ff9c9c";
 
         document.getElementById("passiveList").appendChild(listItem);
+        console.log(listItem)
 
         addLocalstorage(listItem.innerText, "passiveTaskList")
         deleteLocalstorage(listItem.innerText, "activeTaskList")
+
+        //set liButton onclick 
+        var liButton = document.getElementById("input"+ idnummer).nextElementSibling;
+        liButton.setAttribute('onclick', `deleteItem(${idnummer}, "passiveTaskList")`)
 
     } else {
         listItem.style.backgroundColor = "#fff";
@@ -149,5 +154,9 @@ function clickCheckbox(idnummer) {
 
         addLocalstorage(listItem.innerText, "activeTaskList")
         deleteLocalstorage(listItem.innerText, "passiveTaskList")
+
+        //set liButton onclick Inhalt
+        var liButton = document.getElementById("input"+ idnummer).nextElementSibling;
+        liButton.setAttribute('onclick', `deleteItem(${idnummer}, "activeTaskList")`)
     }
 }

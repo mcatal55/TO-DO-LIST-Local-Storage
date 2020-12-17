@@ -134,12 +134,11 @@ enterKey.addEventListener('keydown', function (e) {
 function clickCheckbox(idnummer) {
     var item = document.getElementById("input" + idnummer);
     var listItem = document.getElementById("li" + idnummer);
-    console.log(idnummer)
+    
     if (item.checked) {
         listItem.style.backgroundColor = "#ff9c9c";
 
         document.getElementById("passiveList").appendChild(listItem);
-        console.log(listItem)
 
         addLocalstorage(listItem.innerText, "passiveTaskList")
         deleteLocalstorage(listItem.innerText, "activeTaskList")
